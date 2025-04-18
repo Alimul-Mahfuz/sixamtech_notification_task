@@ -27,6 +27,8 @@ Route::middleware('auth')->group(function () {
         });
         Route::prefix('notification')->group(function () {
             Route::get('/', [NotificationController::class, 'index'])->name('notification.index');
+            Route::patch('markAsRead/{id}', [NotificationController::class, 'markAsRead'])->name('notification.markAsRead');
+            Route::get('get-unread-count', [NotificationController::class, 'getUnreadCount'])->name('notification.getUnreadCount');
         });
     });
 

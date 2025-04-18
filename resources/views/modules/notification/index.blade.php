@@ -12,7 +12,7 @@
 
     <div class="row">
         @forelse($notifications as $notification)
-            <div class="col-md-6 col-lg-4 mb-4">
+            <div class="col-12 mb-4">
                 <div class="card shadow-sm border-0 {{ $notification->read ? 'bg-light' : 'bg-white' }}">
                     <div class="card-body">
                         <h5 class="card-title text-primary">{{ $notification->title }}</h5>
@@ -24,7 +24,7 @@
                     </div>
                     <div class="card-footer bg-transparent border-0 d-flex justify-content-between">
                         @if(!$notification->read)
-                            <form action="" method="POST">
+                            <form action="{{route('notification.markAsRead',["id"=>$notification->id])}}" method="POST">
                                 @csrf
                                 @method('PATCH')
                                 <button class="btn btn-sm btn-outline-success">Mark as read</button>
@@ -42,5 +42,8 @@
                 </div>
             </div>
         @endforelse
+        <div class="col-12">
+            {{$notifications->links()}}
+        </div>
     </div>
 @endsection

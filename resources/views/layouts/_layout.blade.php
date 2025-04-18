@@ -33,15 +33,21 @@
                                 Task List
                             </a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item position-relative" id="notification-nav">
                             <a
                                 class="nav-link fw-semibold {{ request()->routeIs('notification.index') ? 'active' : '' }}"
                                 aria-current="page"
                                 href="{{ route('notification.index') }}"
                             >
                                 Notification
+                                <span
+                                    id="notification-dot"
+                                    class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"
+                                    style="display: none;"
+                                ><span class="visually-hidden">Unread notifications</span></span>
                             </a>
                         </li>
+
                     @endif
 
                 </ul>
@@ -85,6 +91,34 @@
         @yield('content')
     </div>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    function getUnreadNotification() {
+        $.ajax({
+            url: "{{ route('notification.getUnreadCount') }}",
+            type: "GET",
+            success: function (response) {
+                const dot = document.getElementById('notification-dot');
+                if (response.count > 0) {
+                    dot.style.display = 'inline-block';
+                } else {
+                    dot.style.display = 'none';
+                }
+            },
+            error: function () {
+                console.error('Failed to fetch unread notifications.');
+            }
+        });
+    }
+
+    // Initial load
+    getUnreadNotification();
+
+    // Poll every 2 seconds
+    setInterval(getUnreadNotification, 2000);
+</script>
+
 
 
 <script src="{{asset('lib/bootstrap/js/bootstrap.min.js')}}"></script>

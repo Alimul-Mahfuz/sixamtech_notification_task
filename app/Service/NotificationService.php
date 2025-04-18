@@ -20,13 +20,29 @@ class NotificationService
 
     }
 
-    function getNotification()
+    function getNotification(): \Illuminate\Pagination\LengthAwarePaginator
     {
         $auth_user = auth()->user();
         return Notification::query()
             ->where('receiver_id', $auth_user->id)
-            ->where('read', false)
             ->orderBy('created_at', 'desc')
             ->paginate(5);
+    }
+
+    function getNotificationById(int $id): Notification
+    {
+        return Notification::query()->findOrFail($id);
+    }
+
+    function markAsRead(int $id): void
+    {
+        Notification::query()->where('id', $id)->update(['read' => true]);
+    }
+
+    function getUnreadCount(): int{
+        return Notification::query()
+            ->where('read', false)
+            ->where('receiver_id', auth()->user()->id)
+            ->count();
     }
 }

@@ -18,4 +18,16 @@ class NotificationController extends Controller
         $notifications = $this->notificationService->getNotification();
         return view('modules.notification.index', compact('notifications'));
     }
+
+    function markAsRead($id)
+    {
+        $this->notificationService->markAsRead($id);
+        return redirect()->back();
+
+    }
+
+    function getUnreadCount(){
+        $count=$this->notificationService->getUnreadCount();
+        return response()->json(['count' => $count]);
+    }
 }
